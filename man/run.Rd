@@ -37,7 +37,7 @@ run(data = NULL, run.model = "LF", grid.input = NULL, cov.model = "Exp",
 \link{plot.pa}.
 }
 \examples{
-\dontshow{
+\dontrun{
 ######################################################
 
 ## 
