@@ -1,0 +1,25 @@
+
+importFrom("fields", "rdist")
+importFrom("graphics", "abline", "legend", "par", "points", "segments", "title", "pairs", "persp", "plot")
+#importFrom("sp", "coordinates", "coordinates<-", "Polygon", "spplot", "SpatialPointsDataFrame")
+importFrom("grDevices", "chull", "as.raster", "gray", "colorRampPalette")
+importFrom("gstat", "gstat", "fit.lmc", "variogram", "fit.variogram", "vgm", "krige")
+importFrom("mgcv", "gam")
+importFrom("parallel", "detectCores", "makeCluster", "mclapply", "stopCluster")
+importFrom("spTimer", "spT.grid.coords")
+importFrom("stats", "na.exclude", "na.omit", "na.pass", "sd", "var", "kmeans", "as.formula", "contrasts", "density", "dist", "is.empty.model", "lm", "predict", "model.frame", "model.matrix", "model.response", "pacf", "qqline", "qqnorm", "quantile", "terms", "terms.formula", "ts", "complete.cases", "runif")
+importFrom("utils", "txtProgressBar", "setTxtProgressBar")
+importFrom("dplyr", "group_by", "sample_n", "%>%")
+importFrom("viridis", "viridis")
+import("sp")
+
+
+S3method(plot,pa)
+S3method(print,pa)
+
+exportClasses("pa")
+export(
+       "run",
+	   "plot.pa",
+	   "print.pa"
+)

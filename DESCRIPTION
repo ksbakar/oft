@@ -1,0 +1,12 @@
+Package: oft
+Type: Package
+Title: On Farm Tools (OFT)
+Version: 1.0
+Date: 2019-04-01
+Author: K. Shuvo Bakar, Huidong Jin, Brent Henderson
+Maintainer: Shuvo Bakar <shuvo.bakar@csiro.au>
+Depends: R (>= 3.4.0)
+Description: Co-Kriging Methods: (1) Global, (2) Local Adaptive: Based on (i) radius algorithm (ii) radius cross-validation (iii) number of points with cross-validation (iv) radius and number of points with cross-validation, (4) (2) Local Adaptive (based on radius algorithm)  (3) Local Fixed (4) Subsampling - K means (5) Subsampling - bootstrap.
+License: GPL (>= 2)
+Imports: dplyr, fields, ggplot2, graphics, grDevices, gstat, mgcv, parallel, sp, spTimer, stats, utils, viridis 
+LazyData: yes
