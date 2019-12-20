@@ -2751,14 +2751,16 @@ plot.pa <- function(x, treatment=FALSE, differences=FALSE, zval=FALSE, variance=
 ##
 print.pa<-function(x, ...) {
   if(x$run.model=="G"){ m <- paste0("Global model.")}
-  if(x$run.model=="LA-R-A"){ m <- paste0("Local model with adaptive neighbourhood radius algorithm.")}
-  if(x$run.model=="LA-R"){ m <- paste0("Local model with adaptive neighbourhood range using cross-validation.")}
-  if(x$run.model=="LA-P"){ m <- paste0("Local model with adaptive neighbourhood points using cross-validation.")}
-  if(x$run.model=="LA-RP"){ m <- paste0("Local model with adaptive neighbourhood range and points using cross-validation.")}
-  if(x$run.model=="LF"){ m <- paste0("Local model with fixed neighbourhood points. \n",x$neighbourhood.points," points used for each treatment.")}
-  if(x$run.model=="SR"){ m <- paste0("Model with random subsampling. Not a random replication method.")}
-  if(x$run.model=="SK"){ m <- paste0("Model with subsampling based on k-means algorithm.\nUse no.of.replication argument to increase the replications.")}
-  if(x$run.model=="SB"){ m <- paste0("Model with subsampling based on bootstrapping algorithm.\nUse no.of.replication argument to increase the replications.")}
+  #if(x$run.model=="LA-R-A"){ m <- paste0("Local model with adaptive neighbourhood radius algorithm.")}
+  #if(x$run.model=="LA-R"){ m <- paste0("Local model with adaptive neighbourhood range using cross-validation.")}
+  #if(x$run.model=="LA-P"){ m <- paste0("Local model with adaptive neighbourhood points using cross-validation.")}
+  if(x$run.model=="AP"){ m <- paste0("Local model with adaptive neighbourhood points using cross-validation.")}
+  #if(x$run.model=="LA-RP"){ m <- paste0("Local model with adaptive neighbourhood range and points using cross-validation.")}
+  #if(x$run.model=="LF"){ m <- paste0("Local model with fixed neighbourhood points. \n",x$neighbourhood.points," points used for each treatment.")}
+  if(x$run.model=="FP"){ m <- paste0("Local model with fixed neighbourhood points. \n",x$neighbourhood.points," points used for each treatment.")}
+  #if(x$run.model=="SR"){ m <- paste0("Model with random subsampling. Not a random replication method.")}
+  #if(x$run.model=="SK"){ m <- paste0("Model with subsampling based on k-means algorithm.\nUse no.of.replication argument to increase the replications.")}
+  #if(x$run.model=="SB"){ m <- paste0("Model with subsampling based on bootstrapping algorithm.\nUse no.of.replication argument to increase the replications.")}
   cat("---------------------------------------------------------"); cat('\n');
   cat("Model: "); cat(x$run.model); cat('\n');
   #cat("---------------------------------------------------------"); cat('\n');
