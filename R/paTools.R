@@ -24,7 +24,7 @@ run <- function(data = NULL,
   if(!run.model %in% c("AP", "FP")){ stop("\n Define model correctly: 'AP': local adaptive based on points, 'FP': local fixed points. \n")  }
   #
   neighbourhood.size = NULL;
-  pts.for.each.treat = 20, # this is for local approach to ensure the number of points in each treatment, default is 20
+  pts.for.each.treat = 20; # this is for local approach to ensure the number of points in each treatment, default is 20
   subsample.percentage = 10; # for kmeans and bootstrap
   num.of.replications = 100; # for kmeans and bootstrap
   tol.site = 1000;
