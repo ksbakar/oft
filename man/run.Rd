@@ -5,7 +5,7 @@
 This function is used to obtain co-kriging estimations based on a set of local methods. 
 }
 \usage{
-run(data = NULL, run.model = "LF", grid.input = NULL, cov.model = "Exp",
+run(data = NULL, run.model = "FP", grid.input = NULL, cov.model = "Exp",
     neighbourhood.points = 50, random.seed=1234, ...)
 }
 \arguments{
@@ -63,7 +63,7 @@ p
 ## fixed neighbourhood algorithm 
 ##
 
-out.lf <- run(data=LangHorneCreek,run.model="LF",grid.input=grid)
+out.lf <- run(data=LangHorneCreek,run.model="FP",grid.input=grid)
 names(out.lf)
 plot(out.lf, treatment=TRUE)
 plot(out.lf, differences=TRUE)
@@ -75,7 +75,7 @@ plot(out.lf, covariances=TRUE)
 ## adaptive points algorithm
 ##
 
-out.p <- run(data=LangHorneCreek,run.model="LA-P",grid.input=grid)
+out.p <- run(data=LangHorneCreek,run.model="AP",grid.input=grid)
 plot(out.p, zval=TRUE)
 
 # estimated samples 
