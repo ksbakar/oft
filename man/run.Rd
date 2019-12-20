@@ -6,9 +6,7 @@ This function is used to obtain co-kriging estimations based on a set of local m
 }
 \usage{
 run(data = NULL, run.model = "LF", grid.input = NULL, cov.model = "Exp",
-  neighbourhood.size = NULL, neighbourhood.points = 50, pts.for.each.treat = 10,
-  subsample.percentage = 10, num.of.replications = 100, tol.site = 1000, 
-  random.seed=1234, ...)
+    neighbourhood.points = 50, random.seed=1234, ...)
 }
 \arguments{
 \item{data}{This argument is used to input data. The data set should be pre-processed into 4 columns. First two columns will represent x and y coordinates of the data points. Third column will represent the values, and the fourth column will represent the treatment index or name.}
