@@ -9,15 +9,10 @@
 ##
 ## the run function
 run <- function(data = NULL,
-                run.model = "LF", # Define model correctly: 'G': global, 'LA-R-A': local adaptive based on radius (proposed algorithm), 'LA-R': local adaptive based on radius (cross-val), 'LA-P': local adaptive based on points (cross-val), 'LA-RP': local adaptive based on radius and points (cross-val), 'LF': local fixed, 'SR': subsampling - random, 'SK': subsampling Kmeans clustering, 'SB': subsampling bootstrapping
+                run.model = "FP", 
                 grid.input = NULL,
                 cov.model = "Exp",
-                neighbourhood.size = NULL,
                 neighbourhood.points = 50,
-                pts.for.each.treat = 10, # this is for local approach to ensure the number of points in each treatment, default is 20
-                subsample.percentage = 10, # for kmeans and bootstrap
-                num.of.replications = 100, # for kmeans and bootstrap
-                tol.site = 1000,
                 random.seed=1234, # random seed for inside cross-validations
                 ...) {
   #				
@@ -26,21 +21,19 @@ run <- function(data = NULL,
   #
   if(is.null(data)){ stop("Input a data frame with n rows and 4 columns. \n Col:(1) Easting  (or x axis)\n Col:(2) Northing  (or y axis)\n Col:(3) Observations\n Col:(4) Treatment labels.")  }
   #
-  #if(!run.model %in% c("G", "LA-R-A", "LA-R", "LA-P", "LA-RP", "LF", "SR", "SK","SB")){ stop("\n Define model correctly: 'G': global, 'LA-R': local adaptive based on radius, 'LA-P': local adaptive based on points, 'LA-RP': local adaptive based on radius and points, 'LF': local fixed, 'SR': subsampling - random, 'SK': subsampling Kmeans clustering, 'SB': subsampling bootstrapping\n")  }
-  if(!run.model %in% c("LA-R-A", "LA-P", "LF", "SK")){ stop("\n Define model correctly: 'LA-R-A': local adaptive based on radius expanding algorithm,'LA-P': local adaptive based on points, 'LF': local fixed, 'SK': subsampling Kmeans clustering \n")  }
+  if(!run.model %in% c("AP", "FP")){ stop("\n Define model correctly: 'AP': local adaptive based on points, 'FP': local fixed points. \n")  }
+  #
+  neighbourhood.size = NULL;
+  pts.for.each.treat = 20, # this is for local approach to ensure the number of points in each treatment, default is 20
+  subsample.percentage = 10; # for kmeans and bootstrap
+  num.of.replications = 100; # for kmeans and bootstrap
+  tol.site = 1000;
   #
   if(run.model=="G"){ type <- "global" }
-  else if(run.model=="LA-R-A"){ type <- "local-processed-r-a" } # local adaptive based on radius - algorithm,
-  else if(run.model=="LA-R"){ type <- "local-processed-r" } # local adaptive based on radius cross-val,
-  else if(run.model=="LA-P"){ type <- "local-processed-p" } # local adaptive based on points cross-val,
-  else if(run.model=="LA-RP"){ type <- "local-processed-rp" } # local adaptive based on automated optimisation of radius and number of points cross-val,
-  else if(run.model=="LF"){ type <- "local-fixed" }
-  else if(run.model=="SR"){ type <- "random" } # only one replication 
-  else if(run.model=="SK"){ type <- "kmeans" }
-  else if(run.model=="SB"){ type <- "boot" }
+  else if(run.model=="AP"){ type <- "local-processed-p" } # local adaptive based on points cross-val,
+  else if(run.model=="FP"){ type <- "local-fixed" }
   else { stop("Correctly define input for 'run.model'\n")}
   #
-  #if(is.null(grid.input)){ stop("Requires value for 'grid.input'. Input formats are: matrix/dataframe of grid coordinates or shape file. \n") }
   if(is.null(grid.input)){  grid.size <- c(10,10); grid.coords <- grid.input; shapefile <- NULL  }
   else if(is.vector(grid.input)){ grid.size <- grid.input; grid.coords <- grid.input; shapefile <- NULL  }
   else if(is.matrix(grid.input) | is.data.frame(grid.input)){ grid.size <- NULL; grid.coords <- grid.input; shapefile <- NULL  }
@@ -2695,25 +2688,25 @@ plot.pa <- function(x, treatment=FALSE, differences=FALSE, zval=FALSE, variance=
     dat <- as.data.frame(cbind(x$grid.coordinates,x$kriged.output))
     coordinates(dat) <- names(dat[,1:2])
     if(isTRUE(treatment)){
-      ct <- round(seq(0,ceiling(max(unlist(data.frame(dat[,c(1,3,5)])[,1:3]))),length.out=length.out),2)
+      ct <- round(seq(0,ceiling(max(unlist(data.frame(dat[,c(1,3,5)])[,1:3]))),length.out=length.out+1),2)
       .wrapper.spplot(dat,zcol=c(1,3,5),main="Treatments",cuts=ct,col.regions = viridis(length(ct)))
     }
     else if(isTRUE(differences)){
-      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(7,9,11)])[,1:3]))),ceiling(max(unlist(data.frame(dat[,c(7,9,11)])[,1:3]))),length.out=length.out),2)
+      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(7,9,11)])[,1:3]))),ceiling(max(unlist(data.frame(dat[,c(7,9,11)])[,1:3]))),length.out=length.out+1),2)
       .wrapper.spplot(dat,zcol=c(7,9,11),main="Treatment Differences",cuts=ct,col.regions = viridis(length(ct)))
     }
     else if(isTRUE(zval)){
-      #ct <- round(seq(floor(min(unlist(data.frame(dat[,c(13,14,15)])[,1:3]))),ceiling(max(unlist(data.frame(dat[,c(13,14,15)])[,1:3]))),length.out=length.out),2)
+      #ct <- round(seq(floor(min(unlist(data.frame(dat[,c(13,14,15)])[,1:3]))),ceiling(max(unlist(data.frame(dat[,c(13,14,15)])[,1:3]))),length.out=length.out+1),2)
 	  ct <- c(-5000,-1.96,-1.645,1.6451,1.961,5000)
       .wrapper.spplot(dat,zcol=c(13,14,15),main="Z-value for Treatment Differences",cuts=ct,col.regions = viridis(length(ct)),
                 legendEntries=c("< -1.96","[-1.96,-1.645)","[-1.645,1.645]","(1.645,1.96]","> 1.96"))
     }
     else if(isTRUE(variance)){
-      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(2,4,6)])[,1:3]))),ceiling(max(unlist(data.frame(dat[,c(2,4,6)])[,1:3]))),length.out=length.out),2)
+      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(2,4,6)])[,1:3]))),ceiling(max(unlist(data.frame(dat[,c(2,4,6)])[,1:3]))),length.out=length.out+1),2)
       .wrapper.spplot(dat,zcol=c(2,4,6),main="Variances",cuts=ct,col.regions = viridis(length(ct)))
     }
     else if(isTRUE(covariance)){
-      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(8,10,12)])[,1:3]))),ceiling(max(unlist(data.frame(dat[,c(8,10,12)])[,1:3]))),length.out=length.out),2)
+      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(8,10,12)])[,1:3]))),ceiling(max(unlist(data.frame(dat[,c(8,10,12)])[,1:3]))),length.out=length.out+1),2)
       .wrapper.spplot(dat,zcol=c(8,10,12),main="Covariances",cuts=ct,col.regions = viridis(length(ct)))
     }
     else{
@@ -2726,24 +2719,23 @@ plot.pa <- function(x, treatment=FALSE, differences=FALSE, zval=FALSE, variance=
     dat <- as.data.frame(cbind(x$grid.coordinates,x$kriged.output))
     coordinates(dat) <- names(dat[,1:2])
     if(isTRUE(treatment)){
-      ct <- round(seq(0,ceiling(max(unlist(data.frame(dat[,c(1,3)])[,1:2]))),length.out=length.out),2)
+      ct <- round(seq(0,ceiling(max(unlist(data.frame(dat[,c(1,3)])[,1:2]))),length.out=length.out+1),2)
       .wrapper.spplot(dat,zcol=c(1,3),main="Treatments",cuts=ct,col.regions = viridis(length(ct)))
     }
     else if(isTRUE(differences)){
-      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(5)])[,1]))),ceiling(max(unlist(data.frame(dat[,c(5)])[,1]))),length.out=length.out),2)
+      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(5)])[,1]))),ceiling(max(unlist(data.frame(dat[,c(5)])[,1]))),length.out=length.out+1),2)
       .wrapper.spplot(dat,zcol=c(5),main="Treatment Differences",cuts=ct,col.regions = viridis(length(ct)))
     }
-    else if(isTRUE(pval)){
-      #ct <- round(seq(0,1,length.out=length.out),2)
+    else if(isTRUE(zval)){
  	  ct <- c(-5000,-1.96,-1.645,1.645,1.96,5000)
       .wrapper.spplot(dat,zcol=c(8),main="Z-value for Treatment Differences",cuts=ct,col.regions = rev(gray(1:length(ct)/length(ct))))
     }
     else if(isTRUE(variance)){
-      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(2,4)])[,1:2]))),ceiling(max(unlist(data.frame(dat[,c(2,4)])[,1:2]))),length.out=length.out),2)
+      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(2,4)])[,1:2]))),ceiling(max(unlist(data.frame(dat[,c(2,4)])[,1:2]))),length.out=length.out+1),2)
       .wrapper.spplot(dat,zcol=c(2,4),main="Variances",cuts=ct,col.regions = viridis(length(ct)))
     }
     else if(isTRUE(covariance)){
-      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(6)])[,1]))),ceiling(max(unlist(data.frame(dat[,c(6)])[,1]))),length.out=length.out),2)
+      ct <- round(seq(floor(min(unlist(data.frame(dat[,c(6)])[,1]))),ceiling(max(unlist(data.frame(dat[,c(6)])[,1]))),length.out=length.out+1),2)
       .wrapper.spplot(dat,zcol=c(6),main="Coariance",cuts=ct,col.regions = viridis(length(ct)))
     }
     else{
