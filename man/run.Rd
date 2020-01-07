@@ -55,8 +55,8 @@ head(LanghorneCreek)
 grid <- data.frame(spT.grid.coords(c(range(LanghorneCreek[,1])),c(range(LanghorneCreek[,2])),by=c(100,100)))
 p <- ggplot() + 
   geom_point(data=grid,aes(x=X1,y=X2),pch="+") +
-  geom_point(data=LanghorneCreek,aes(x=east,y=north,color=treatment)) +
-  labs(x="Easting",y="Northing",color="Treatment")
+  geom_point(data=LanghorneCreek,aes(x=east,y=north,color=treatment,shape=treatment)) +
+  labs(x="Easting",y="Northing",color="Treatment",shape="Treatment")
 p
 
 ##
